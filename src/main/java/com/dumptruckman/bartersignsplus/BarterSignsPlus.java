@@ -64,7 +64,8 @@ public class BarterSignsPlus extends JavaPlugin {
         registerEvents();
 
         //Call Home (usage stats)
-        CallHome.load(this);
+        if (!this.getDescription().getVersion().contains("${"))
+            CallHome.load(this);
 
         // Display enable message/version info
         Logging.info("enabled.", true);
