@@ -1,0 +1,4 @@
+name: BarterSigns+
+main: com.dumptruckman.bartersignsplus.BarterSignsPlus
+version: ${version.number}-b${build.number}
+author: dumptruckman
