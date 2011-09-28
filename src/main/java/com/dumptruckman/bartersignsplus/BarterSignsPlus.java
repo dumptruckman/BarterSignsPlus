@@ -2,9 +2,13 @@ package com.dumptruckman.bartersignsplus;
 
 import com.dumptruckman.bartersignsplus.config.Config;
 import com.dumptruckman.bartersignsplus.data.Data;
+import com.dumptruckman.bartersignsplus.listener.BarterSignsBlockListener;
+import com.dumptruckman.bartersignsplus.listener.BarterSignsEntityListener;
+import com.dumptruckman.bartersignsplus.listener.BarterSignsPlayerListener;
 import com.dumptruckman.bartersignsplus.locale.Language;
 import com.dumptruckman.bartersignsplus.util.Logging;
 import org.blockface.bukkitstats.CallHome;
+import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -17,6 +21,10 @@ import java.util.logging.Logger;
 public class BarterSignsPlus extends JavaPlugin {
 
     private static BarterSignsPlus instance = null;
+
+    private final BarterSignsBlockListener blockListener = new BarterSignsBlockListener();
+    private final BarterSignsPlayerListener playerListener = new BarterSignsPlayerListener();
+    private final BarterSignsEntityListener entityListener = new BarterSignsEntityListener();
 
     final public void onDisable() {
         // Save the plugin data
@@ -74,6 +82,16 @@ public class BarterSignsPlus extends JavaPlugin {
     final public void registerEvents() {
         final PluginManager pm = getServer().getPluginManager();
         // Event registering goes here
+        pm.registerEvent(Event.Type.SIGN_CHANGE, blockListener, Event.Priority.Normal, this);
+        pm.registerEvent(Event.Type.BLOCK_PLACE, blockListener, Event.Priority.Highest, this);
+        pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Event.Priority.Lowest, this);
+        pm.registerEvent(Event.Type.PLAYER_TOGGLE_SNEAK, playerListener, Event.Priority.Normal, this);
+        pm.registerEvent(Event.Type.BLOCK_DAMAGE, blockListener, Event.Priority.Highest, this);
+        pm.registerEvent(Event.Type.BLOCK_BREAK, blockListener, Event.Priority.Highest, this);
+        pm.registerEvent(Event.Type.BLOCK_PHYSICS, blockListener, Event.Priority.Highest, this);
+        pm.registerEvent(Event.Type.BLOCK_FADE, blockListener, Event.Priority.Highest, this);
+        pm.registerEvent(Event.Type.BLOCK_BURN, blockListener, Event.Priority.Highest, this);
+        pm.registerEvent(Event.Type.ENTITY_EXPLODE, entityListener, Event.Priority.Highest, this);
     }
 
     public static BarterSignsPlus getInstance() {

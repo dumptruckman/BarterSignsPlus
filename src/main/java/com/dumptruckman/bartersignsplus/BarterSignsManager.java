@@ -3,6 +3,7 @@ package com.dumptruckman.bartersignsplus;
 import com.dumptruckman.bartersignsplus.object.BarterSign;
 import com.dumptruckman.bartersignsplus.util.Logging;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 
 /**
  * @author dumptruckman
@@ -11,6 +12,10 @@ public class BarterSignsManager {
 
     public static BarterSign getBarterSign(Location location) {
         return getBarterSign(location.getWorld().getName(), location.getBlockX(), location.getBlockY(), location.getBlockZ());
+    }
+
+    public static BarterSign getBarterSign(Block block) {
+        return getBarterSign(block.getWorld().getName(), block.getX(), block.getY(), block.getZ());
     }
 
     public static BarterSign getBarterSign(String world, int x, int y, int z) {
@@ -24,6 +29,10 @@ public class BarterSignsManager {
 
     public static void createBarterSign(String world, int x, int y, int z) {
         // TODO
+    }
+
+    public static Boolean barterSignExists(Block block) {
+        return null;
     }
 
     public static void loadBarterSigns() {

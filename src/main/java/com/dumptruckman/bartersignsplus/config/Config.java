@@ -12,6 +12,11 @@ public enum Config {
     LANGUAGE_FILE_NAME("settings.language_file", "english.yml", "# This is the language file you wish to use."),
     DEBUG_MODE("settings.debug_mode.enable", false, "# Enables debug mode."),
     DATA_SAVE_PERIOD("settings.data.save_every", 300, "# This is often plugin data is written to the disk."),
+
+    SIGN_INDESTRUCTIBLE("signs.default.indestructible", true,
+            "# Whether or not signs are indestructible by default.",
+            "# Note: You may still remove signs through the sign's menu."),
+    SIGN_DROPS_ITEMS("signs.default.drops_items", true, "# Whether or not signs drop items on break by default."),
     ;
 
     private String path;

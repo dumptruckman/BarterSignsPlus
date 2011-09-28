@@ -14,4 +14,8 @@ public abstract class BarterSign {
         this.block = block;
         id = block.getWorld().getName() + "." + block.getX() + "," + block.getY() + "," + block.getZ();
     }
+
+    public abstract boolean isIndestructible();
+    public abstract boolean isDroppingItemsOnBreak();
+    public abstract void dropContents();
 }
