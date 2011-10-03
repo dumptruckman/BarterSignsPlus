@@ -17,6 +17,7 @@ public enum Config {
             "# Whether or not signs are indestructible by default.",
             "# Note: You may still remove signs through the sign's menu."),
     SIGN_DROPS_ITEMS("signs.default.drops_items", true, "# Whether or not signs drop items on break by default."),
+    SIGN_UNLIMITED_STOCK("signs.default.unlimited_stock", false, "# Signs will have unlimited stock by default."),
     ;
 
     private String path;
