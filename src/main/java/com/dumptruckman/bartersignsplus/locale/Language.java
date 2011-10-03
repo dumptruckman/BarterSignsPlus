@@ -16,10 +16,11 @@ import java.util.List;
  * @author dumptruckman, SwearWord
  */
 public enum Language {
-    ERROR ("generic.error"),
-    SUCCESS ("generic.success"),
-    INFO ("generic.info"),
+    ERROR ("messages.generic.error"),
+    SUCCESS ("messages.generic.success"),
+    INFO ("messages.generic.info"),
 
+    NO_CREATE_PERM ("messages.sign.create.denied"),
     ;
 
     private String path;
