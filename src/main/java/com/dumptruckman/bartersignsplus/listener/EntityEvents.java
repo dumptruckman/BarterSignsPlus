@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * @author dumptruckman
  */
-public class BarterSignsEntityListener extends EntityListener {
+public class EntityEvents extends EntityListener {
 
     @Override
     public void onEntityExplode(EntityExplodeEvent event) {

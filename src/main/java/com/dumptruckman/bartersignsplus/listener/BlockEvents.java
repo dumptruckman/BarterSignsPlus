@@ -10,7 +10,7 @@ import org.bukkit.event.block.*;
 /**
  * @author dumptruckman
  */
-public class BarterSignsBlockListener extends BlockListener {
+public class BlockEvents extends BlockListener {
 
     public void onSignChange(SignChangeEvent event) {
         // Throw out unimportant events immediately

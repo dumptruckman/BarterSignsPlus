@@ -5,5 +5,5 @@ import org.bukkit.event.player.PlayerListener;
 /**
  * @author dumptruckman
  */
-public class BarterSignsPlayerListener extends PlayerListener {
+public class PlayerEvents extends PlayerListener {
 }

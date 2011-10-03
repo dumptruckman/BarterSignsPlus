@@ -2,9 +2,9 @@ package com.dumptruckman.bartersignsplus;
 
 import com.dumptruckman.bartersignsplus.config.Config;
 import com.dumptruckman.bartersignsplus.data.Data;
-import com.dumptruckman.bartersignsplus.listener.BarterSignsBlockListener;
-import com.dumptruckman.bartersignsplus.listener.BarterSignsEntityListener;
-import com.dumptruckman.bartersignsplus.listener.BarterSignsPlayerListener;
+import com.dumptruckman.bartersignsplus.listener.BlockEvents;
+import com.dumptruckman.bartersignsplus.listener.EntityEvents;
+import com.dumptruckman.bartersignsplus.listener.PlayerEvents;
 import com.dumptruckman.bartersignsplus.locale.Language;
 import com.dumptruckman.bartersignsplus.util.Logging;
 import org.blockface.bukkitstats.CallHome;
@@ -13,7 +13,6 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
-import java.util.logging.Logger;
 
 /**
  * @author dumptruckman
@@ -22,9 +21,9 @@ public class BarterSignsPlus extends JavaPlugin {
 
     private static BarterSignsPlus instance = null;
 
-    private final BarterSignsBlockListener blockListener = new BarterSignsBlockListener();
-    private final BarterSignsPlayerListener playerListener = new BarterSignsPlayerListener();
-    private final BarterSignsEntityListener entityListener = new BarterSignsEntityListener();
+    private final BlockEvents blockListener = new BlockEvents();
+    private final PlayerEvents playerListener = new PlayerEvents();
+    private final EntityEvents entityListener = new EntityEvents();
 
     final public void onDisable() {
         // Save the plugin data
