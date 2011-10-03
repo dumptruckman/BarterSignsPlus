@@ -37,22 +37,17 @@ public class BarterSignsBlockListener extends BlockListener {
 
         BarterSign sign = BarterSignsManager.getBarterSign(event.getBlock());
         // Why did I do this?:
-        if (sign == null) {
-            sign = new BarterSign(plugin, block);
-        }
+        //if (sign == null) {
+        //    sign = new BarterSign(block);
+        //}
+        //if (sign == null) return;
         final BarterSign barterSign = sign;
 
-        if (barterSign.getMenuIndex() != barterSign.REMOVE) {
-            event.setCancelled(true);
+        if (!event.isCancelled() && barterSign.isDroppingItemsOnBreak()) {
+            barterSign.dropContents();
         }
 
-        if (!event.isCancelled() && plugin.config.getBoolean(ConfigPath.SIGN_DROPS_ITEMS.getPath(),
-                (Boolean) ConfigPath.SIGN_DROPS_ITEMS.getDefault())) {
-            barterSign.drop();
-            return;
-        }
-
-        if (!event.isCancelled()) {
+        /*if (!event.isCancelled()) {
             if (BarterSign.SignPhase.READY.equalTo(barterSign.getPhase())) {
                 plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
                     @Override
@@ -72,7 +67,7 @@ public class BarterSignsBlockListener extends BlockListener {
                     }
                 }, 20L);
             }
-        }
+        }*/
     }
 
     @Override
@@ -82,16 +77,16 @@ public class BarterSignsBlockListener extends BlockListener {
         Block block = event.getBlock();
         if (!(block.getState() instanceof Sign)) return;
 
-        if (!BarterSign.exists(plugin, block)) return;
+        if (!BarterSignsManager.barterSignExists(block)) return;
 
-        BarterSign barterSign = BarterSignManager.getBarterSignFromBlock(event.getBlock());
-        if (barterSign == null) {
-            barterSign = new BarterSign(plugin, block);
-        }
-        if (!BarterSign.SignPhase.READY.equalTo(barterSign.getPhase())
+        BarterSign barterSign = BarterSignsManager.getBarterSign(event.getBlock());
+        //if (barterSign == null) {
+        //    barterSign = new BarterSign(block);
+        //}
+        /*if (!BarterSign.SignPhase.READY.equalTo(barterSign.getPhase())
                 || barterSign.getMenuIndex() != barterSign.REMOVE) {
             event.setCancelled(true);
-        }
+        }*/
     }
 
     @Override
@@ -101,18 +96,10 @@ public class BarterSignsBlockListener extends BlockListener {
         Block block = event.getBlock();
         if (!(block.getState() instanceof Sign)) return;
 
-        if (!BarterSign.exists(plugin, block)) return;
+        if (!BarterSignsManager.barterSignExists(block)) return;
+        BarterSign barterSign = BarterSignsManager.getBarterSign(event.getBlock());
 
-        event.setCancelled(plugin.config.getBoolean(ConfigPath.SIGN_INDESTRUCTIBLE.getPath(),
-                (Boolean) ConfigPath.SIGN_INDESTRUCTIBLE.getDefault()));
-
-        if (!event.isCancelled() && plugin.config.getBoolean(ConfigPath.SIGN_DROPS_ITEMS.getPath(),
-                (Boolean) ConfigPath.SIGN_DROPS_ITEMS.getDefault())) {
-            BarterSign barterSign = BarterSignManager.getBarterSignFromBlock(event.getBlock());
-            if (barterSign == null) {
-                return;
-            }
-        }
+        event.setCancelled(barterSign.isIndestructible());
     }
 
     @Override
@@ -122,18 +109,10 @@ public class BarterSignsBlockListener extends BlockListener {
         Block block = event.getBlock();
         if (!(block.getState() instanceof Sign)) return;
 
-        if (!BarterSign.exists(plugin, block)) return;
+        if (!BarterSignsManager.barterSignExists(block)) return;
+        BarterSign barterSign = BarterSignsManager.getBarterSign(event.getBlock());
 
-        event.setCancelled(plugin.config.getBoolean(ConfigPath.SIGN_INDESTRUCTIBLE.getPath(),
-                (Boolean) ConfigPath.SIGN_INDESTRUCTIBLE.getDefault()));
-
-        if (!event.isCancelled() && plugin.config.getBoolean(ConfigPath.SIGN_DROPS_ITEMS.getPath(),
-                (Boolean) ConfigPath.SIGN_DROPS_ITEMS.getDefault())) {
-            BarterSign barterSign = BarterSignManager.getBarterSignFromBlock(event.getBlock());
-            if (barterSign == null) {
-                return;
-            }
-        }
+        event.setCancelled(barterSign.isIndestructible());
     }
 
     @Override
@@ -143,16 +122,9 @@ public class BarterSignsBlockListener extends BlockListener {
         Block block = event.getBlock();
         if (!(block.getState() instanceof Sign)) return;
 
-        if (!BarterSign.exists(plugin, block)) return;
+        if (!BarterSignsManager.barterSignExists(block)) return;
+        BarterSign barterSign = BarterSignsManager.getBarterSign(event.getBlock());
 
-        event.setCancelled(true);
-
-        if (!event.isCancelled() && plugin.config.getBoolean(ConfigPath.SIGN_DROPS_ITEMS.getPath(),
-                (Boolean) ConfigPath.SIGN_DROPS_ITEMS.getDefault())) {
-            BarterSign barterSign = BarterSignManager.getBarterSignFromBlock(event.getBlock());
-            if (barterSign == null) {
-                return;
-            }
-        }
+        event.setCancelled(barterSign.isIndestructible());
     }
 }
