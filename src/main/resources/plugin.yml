@@ -2,3 +2,11 @@ name: BarterSigns+
 main: com.dumptruckman.bartersignsplus.BarterSignsPlus
 version: ${version.number}-b${build.number}
 author: dumptruckman
+
+permissions:
+    bartersignsplus.create:
+        description: Allows user to create Barter Signs
+        default: true
+    bartersignsplus.use:
+        description: Allows user to use Barter Signs
+        default: true
