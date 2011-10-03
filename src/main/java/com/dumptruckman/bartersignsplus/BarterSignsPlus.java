@@ -1,7 +1,8 @@
 package com.dumptruckman.bartersignsplus;
 
 import com.dumptruckman.bartersignsplus.config.Config;
-import com.dumptruckman.bartersignsplus.data.Data;
+import com.dumptruckman.bartersignsplus.persistence.DBManager;
+import com.dumptruckman.bartersignsplus.persistence.Flatfile;
 import com.dumptruckman.bartersignsplus.listener.BlockEvents;
 import com.dumptruckman.bartersignsplus.listener.EntityEvents;
 import com.dumptruckman.bartersignsplus.listener.PlayerEvents;
@@ -27,7 +28,7 @@ public class BarterSignsPlus extends JavaPlugin {
 
     final public void onDisable() {
         // Save the plugin data
-        Data.save(true);
+        DBManager.save(true);
 
         // Display disable message/version info
         Logging.info("disabled.", true);
@@ -60,7 +61,7 @@ public class BarterSignsPlus extends JavaPlugin {
 
         // Loads the data
         try {
-            Data.load();
+            DBManager.load();
         } catch (IOException e) {  // Catch errors loading the language file and exit out if found.
             Logging.severe("Encountered an error while loading the data file.  Disabling...");
             pm.disablePlugin(this);

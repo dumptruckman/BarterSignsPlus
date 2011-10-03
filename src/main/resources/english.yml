@@ -21,3 +21,6 @@ messages:
     create:
       denied:
       - 'You do not have permission to create this sign!'
+    use:
+      denied:
+      - 'You do not have permission to use this sign!'

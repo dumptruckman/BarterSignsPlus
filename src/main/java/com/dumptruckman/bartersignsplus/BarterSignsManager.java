@@ -1,40 +1,62 @@
 package com.dumptruckman.bartersignsplus;
 
-import com.dumptruckman.bartersignsplus.object.BarterSign;
+import com.dumptruckman.bartersignsplus.sign.BarterSign;
 import com.dumptruckman.bartersignsplus.util.Logging;
-import org.bukkit.Location;
 import org.bukkit.block.Block;
+
+import java.util.HashMap;
 
 /**
  * @author dumptruckman
  */
 public class BarterSignsManager {
 
-    public static BarterSign getBarterSign(Location location) {
-        return getBarterSign(location.getWorld().getName(), location.getBlockX(), location.getBlockY(), location.getBlockZ());
-    }
+    private static HashMap<String, BarterSign> signs = new HashMap<String, BarterSign>();
 
+    /**
+     * Obtain the sign object from memory
+     * @param block Block where sign is physically
+     * @return Sign object
+     */
     public static BarterSign getBarterSign(Block block) {
-        return getBarterSign(block.getWorld().getName(), block.getX(), block.getY(), block.getZ());
+        String id = getSignId(block);
+        return signs.get(id);
     }
 
-    public static BarterSign getBarterSign(String world, int x, int y, int z) {
-        // TODO
-        return null;
+    /**
+     * Creates a new barter sign at block's location
+     * @param block Block where sign is physically
+     * @return Sign object
+     */
+    public static BarterSign createBarterSign(Block block) {
+        String id = getSignId(block);
+        BarterSign barterSign = new BarterSign(block);
+        signs.put(id, barterSign);
+        return barterSign;
     }
 
-    public static void createBarterSign(Location location) {
-        createBarterSign(location.getWorld().getName(), location.getBlockX(), location.getBlockY(), location.getBlockZ());
-    }
-
-    public static void createBarterSign(String world, int x, int y, int z) {
-        // TODO
-    }
-
+    /**
+     * Checks to see if a barter sign is registered for given block
+     * @param block Block where sign is physically
+     * @return true if sign is active at location
+     */
     public static Boolean barterSignExists(Block block) {
-        return null;
+        String id = getSignId(block);
+        return signs.containsKey(id);
     }
 
+    /**
+     * Removes a sign from memory and wipes it from the database
+     * @param barterSign sign to remove
+     */
+    public static void destroyBarterSign(BarterSign barterSign) {
+        signs.remove(barterSign.getId());
+        barterSign.destroy();
+    }
+
+    /**
+     * Loads signs from database into memory
+     */
     public static void loadBarterSigns() {
         Logging.debug("Loading sign data");
         // TODO
@@ -42,5 +64,14 @@ public class BarterSignsManager {
 
     public static void getVendorBench() {
         // TODO
+    }
+
+    /**
+     * Helper method to get a string id for the sign at block's location.  This id is used for storage in database and memory.
+     * @param block Block where sign is physically
+     * @return Id of sign
+     */
+    public static String getSignId(Block block) {
+        return block.getWorld().getName() + "." + block.getX() + "," + block.getY() + "," + block.getZ();
     }
 }

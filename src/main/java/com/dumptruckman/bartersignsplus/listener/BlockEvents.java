@@ -1,8 +1,10 @@
 package com.dumptruckman.bartersignsplus.listener;
 
 import com.dumptruckman.bartersignsplus.BarterSignsManager;
-import com.dumptruckman.bartersignsplus.object.BarterSign;
-import org.bukkit.Location;
+import com.dumptruckman.bartersignsplus.config.Config;
+import com.dumptruckman.bartersignsplus.locale.Language;
+import com.dumptruckman.bartersignsplus.sign.BarterSign;
+import com.dumptruckman.bartersignsplus.permission.Perm;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.event.block.*;
@@ -15,6 +17,29 @@ public class BlockEvents extends BlockListener {
     public void onSignChange(SignChangeEvent event) {
         // Throw out unimportant events immediately
         if (event.isCancelled()) return;
+
+        // Check sign to see if it has barter sign setup phrase
+        String line = event.getLine(0).toLowerCase();
+        if (!line.equals("[barter]")) {
+            boolean found = false;
+            for (String phrase : Config.SIGN_SETUP_PHRASES.getStringList()) {
+                if (line.equals(phrase.toLowerCase())) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) return;
+        }
+
+        // Check permissions to create sign
+        if (!Perm.CREATE_SIGN.has(event.getPlayer())) {
+            Language.NO_CREATE_PERM.bad(event.getPlayer());
+            return;
+        }
+
+        // Create sign
+        BarterSign barterSign = BarterSignsManager.createBarterSign(event.getBlock());
+        barterSign.setOwner(event.getPlayer());
     }
 
     public void onBlockPlace(BlockPlaceEvent event) {

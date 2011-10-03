@@ -14,7 +14,8 @@ import java.util.List;
 public enum Config {
     LANGUAGE_FILE_NAME("settings.language_file", "english.yml", "# This is the language file you wish to use."),
     DEBUG_MODE("settings.debug_mode.enable", false, "# Enables debug mode."),
-    DATA_SAVE_PERIOD("settings.data.save_every", 300, "# This is often plugin data is written to the disk."),
+    DATA_SAVE_PERIOD("settings.data.flatfile.save_every", 300, "# This is often plugin data is written to the disk when using flatfile."),
+    DB_TYPE("settings.data.database_type", "flatfile", "# Currently only supports flatfile"),
 
     SIGN_SETUP_PHRASES("signs.setup.phrases",
             Arrays.asList("bartershop",

@@ -19,22 +19,22 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.dumptruckman.bartersignsplus.data;
+package com.dumptruckman.bartersignsplus.persistence;
 
 import com.dumptruckman.bartersignsplus.BarterSignsPlus;
 
 /**
  * @author dumptruckman
  */
-public class DataSaveTimer implements Runnable {
+public class FlatfileSaveTimer implements Runnable {
 
     private static BarterSignsPlus plugin;
 
-    public DataSaveTimer(BarterSignsPlus plugin) {
-        DataSaveTimer.plugin = plugin;
+    public FlatfileSaveTimer(BarterSignsPlus plugin) {
+        FlatfileSaveTimer.plugin = plugin;
     }
 
     public void run() {
-        Data.save(false);
+        Flatfile.save(false);
     }
 }

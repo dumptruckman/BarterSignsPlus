@@ -1,8 +1,7 @@
 package com.dumptruckman.bartersignsplus.listener;
 
 import com.dumptruckman.bartersignsplus.BarterSignsManager;
-import com.dumptruckman.bartersignsplus.BarterSignsPlus;
-import com.dumptruckman.bartersignsplus.object.BarterSign;
+import com.dumptruckman.bartersignsplus.sign.BarterSign;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.event.entity.EntityExplodeEvent;
