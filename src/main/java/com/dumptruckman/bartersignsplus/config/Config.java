@@ -17,8 +17,7 @@ public enum Config {
     DATA_SAVE_PERIOD("settings.data.save_every", 300, "# This is often plugin data is written to the disk."),
 
     SIGN_SETUP_PHRASES("signs.setup.phrases",
-            Arrays.asList("[barter]",
-                    "bartershop",
+            Arrays.asList("bartershop",
                     "barter shop",
                     "bartersign",
                     "barter signs",
