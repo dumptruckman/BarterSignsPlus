@@ -4,6 +4,9 @@ import com.dumptruckman.bartersignsplus.BarterSignsPlus;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author dumptruckman, SwearWord
@@ -12,6 +15,16 @@ public enum Config {
     LANGUAGE_FILE_NAME("settings.language_file", "english.yml", "# This is the language file you wish to use."),
     DEBUG_MODE("settings.debug_mode.enable", false, "# Enables debug mode."),
     DATA_SAVE_PERIOD("settings.data.save_every", 300, "# This is often plugin data is written to the disk."),
+
+    SIGN_SETUP_PHRASES("signs.setup.phrases",
+            Arrays.asList("[barter]",
+                    "bartershop",
+                    "barter shop",
+                    "bartersign",
+                    "barter signs",
+                    "barter sign"),
+            "# This is the text that must go on the top line of the sign to create a new BarterSigns sign.",
+            "# Casing does not matter."),
 
     SIGN_INDESTRUCTIBLE("signs.default.indestructible", true,
             "# Whether or not signs are indestructible by default.",
@@ -40,6 +53,10 @@ public enum Config {
 
     public final String getString() {
         return config.getString(path, (String)def);
+    }
+
+    public final List<String> getStringList() {
+        return config.getStringList(path, new ArrayList());
     }
 
     /**
