@@ -7,8 +7,11 @@ import com.dumptruckman.bartersignsplus.listener.BlockEvents;
 import com.dumptruckman.bartersignsplus.listener.EntityEvents;
 import com.dumptruckman.bartersignsplus.listener.PlayerEvents;
 import com.dumptruckman.bartersignsplus.locale.Language;
+import com.dumptruckman.bartersignsplus.sign.BarterSign;
 import com.dumptruckman.bartersignsplus.util.Logging;
 import org.blockface.bukkitstats.CallHome;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -25,6 +28,10 @@ public class BarterSignsPlus extends JavaPlugin {
     private final BlockEvents blockListener = new BlockEvents();
     private final PlayerEvents playerListener = new PlayerEvents();
     private final EntityEvents entityListener = new EntityEvents();
+
+    {
+        ConfigurationSerialization.registerClass(BarterSign.class);
+    }
 
     final public void onDisable() {
         // Save the plugin data
@@ -72,8 +79,8 @@ public class BarterSignsPlus extends JavaPlugin {
         registerEvents();
 
         //Call Home (usage stats)
-        if (!this.getDescription().getVersion().contains("${"))
-            CallHome.load(this);
+        //if (!this.getDescription().getVersion().contains("${"))
+        //    CallHome.load(this);
 
         // Display enable message/version info
         Logging.info("enabled.", true);

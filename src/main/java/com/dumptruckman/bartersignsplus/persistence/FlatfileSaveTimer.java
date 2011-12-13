@@ -35,6 +35,6 @@ public class FlatfileSaveTimer implements Runnable {
     }
 
     public void run() {
-        Flatfile.save(false);
+        //plugin.getDatabase()
     }
 }

@@ -11,11 +11,6 @@
       <url>http://repo.bukkit.org/artifactory/repo</url>
     </repository>
     <repository>
-      <id>blockface</id>
-      <name>Blockface</name>
-      <url>http://repo.blockface.org/repository</url>
-    </repository>
-    <repository>
       <id>spout</id>
       <name>Spout</name>
       <url>http://repo.getspout.org</url>
@@ -66,7 +61,7 @@
     <dependency>
       <groupId>org.bukkit</groupId>
       <artifactId>bukkit</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>1.0.1-R1</version>
       <type>jar</type>
       <scope>compile</scope>
     </dependency>

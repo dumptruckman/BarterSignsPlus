@@ -1,6 +1,7 @@
 package com.dumptruckman.bartersignsplus.config;
 
 import com.dumptruckman.bartersignsplus.BarterSignsPlus;
+import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,19 +45,19 @@ public enum Config {
     }
 
     public final Boolean getBoolean() {
-        return config.getBoolean(path, (Boolean)def);
+        return config.getConfig().getBoolean(path, (Boolean) def);
     }
 
     public final Integer getInt() {
-        return config.getInt(path, (Integer)def);
+        return config.getConfig().getInt(path, (Integer) def);
     }
 
     public final String getString() {
-        return config.getString(path, (String)def);
+        return config.getConfig().getString(path, (String) def);
     }
 
     public final List<String> getStringList() {
-        return config.getStringList(path, new ArrayList());
+        return config.getConfig().getStringList(path);
     }
 
     /**
@@ -106,7 +107,7 @@ public enum Config {
         }
 
         // Load the configuration file into memory
-        config = new CommentedConfiguration(new File(BarterSignsPlus.getInstance().getDataFolder(), "config.yml"));
+        config = new CommentedConfiguration(configFile);
         config.load();
 
         // Sets defaults config values
@@ -122,8 +123,8 @@ public enum Config {
     private static void setDefaults() {
         for (Config path : Config.values()) {
             config.addComment(path.getPath(), path.getComments());
-            if (config.getString(path.getPath()) == null) {
-                config.setProperty(path.getPath(), path.getDefault());
+            if (config.getConfig().getString(path.getPath()) == null) {
+                config.getConfig().set(path.getPath(), path.getDefault());
             }
         }
     }

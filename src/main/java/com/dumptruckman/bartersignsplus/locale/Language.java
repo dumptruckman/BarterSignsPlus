@@ -5,6 +5,8 @@ import com.dumptruckman.bartersignsplus.config.Config;
 import com.dumptruckman.bartersignsplus.util.Logging;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.util.config.Configuration;
 
 import java.io.File;
@@ -24,7 +26,7 @@ public enum Language {
     ;
 
     private String path;
-    private static Configuration language;
+    private static FileConfiguration language;
 
     Language(String path) {
         this.path = path;
@@ -56,11 +58,7 @@ public enum Language {
         }
 
         // Load the language file into memory
-        language = new Configuration(languageFile);
-        language.load();
-
-        // Saves the configuration from memory to file
-        language.save();
+        language = YamlConfiguration.loadConfiguration(languageFile);
     }
 
     public static String formatString(String string, Object...args) {

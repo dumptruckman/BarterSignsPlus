@@ -2,13 +2,18 @@ package com.dumptruckman.bartersignsplus.sign;
 
 import com.dumptruckman.bartersignsplus.BarterSignsManager;
 import com.dumptruckman.bartersignsplus.config.Config;
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * @author dumptruckman
  */
-public class BarterSign {
+public class BarterSign implements ConfigurationSerializable {
 
     private final Block block;
     private final String id;
@@ -22,6 +27,26 @@ public class BarterSign {
         this.id = BarterSignsManager.getSignId(block);
         this.indestructible = Config.SIGN_INDESTRUCTIBLE.getBoolean();
         this.dropsContents = Config.SIGN_DROPS_ITEMS.getBoolean();
+    }
+
+    public Map<String, Object> serialize() {
+        Map<String, Object> result = new LinkedHashMap<String, Object>();
+
+        result.put("owner", getOwner());
+        result.put("indestructible", isIndestructible());
+        result.put("dropsContents", isDroppingItemsOnBreak());
+        //@TODO
+
+        return result;
+    }
+
+    public static BarterSign deserialize(Map<String, Object> args) {
+        //@TODO
+        return null;
+    }
+
+    public Player getOwner() {
+        return owner;
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.dumptruckman.bartersignsplus.config;
 
-import org.bukkit.util.config.Configuration;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.*;
 import java.util.HashMap;
@@ -8,132 +9,142 @@ import java.util.HashMap;
 /**
  * @author dumptruckman
  */
-public class CommentedConfiguration extends Configuration {
+public class CommentedConfiguration {
 
     private HashMap<String, String> comments;
     private File file;
+    FileConfiguration config = null;
 
     public CommentedConfiguration(File file) {
-        super(file);
         comments = new HashMap<String, String>();
         this.file = file;
     }
 
-    @Override
+    public void load() {
+        config = YamlConfiguration.loadConfiguration(file);
+    }
+
+    public FileConfiguration getConfig() {
+        return config;
+    }
+
     public boolean save() {
         // Save the config just like normal
-        boolean saved = super.save();
+        try {
+            config.save(file);
 
-        // if there's comments to add and it saved fine, we need to add comments
-        if (!comments.isEmpty() && saved) {
-            // String array of each line in the config file
-            String[] yamlContents =
-                    convertFileToString(file).split("[" + System.getProperty("line.separator") + "]");
+            // if there's comments to add and it saved fine, we need to add comments
+            if (!comments.isEmpty()) {
+                // String array of each line in the config file
+                String[] yamlContents =
+                        convertFileToString(file).split("[" + System.getProperty("line.separator") + "]");
 
-            // This will hold the newly formatted line
-            String newContents = "";
-            // This holds the current path the lines are at in the config
-            String currentPath = "";
-            // This tells if the specified path has already been commented
-            boolean commentedPath = false;
-            // The depth of the path. (number of words separated by periods - 1)
-            int depth = 0;
+                // This will hold the newly formatted line
+                String newContents = "";
+                // This holds the current path the lines are at in the config
+                String currentPath = "";
+                // This tells if the specified path has already been commented
+                boolean commentedPath = false;
+                // The depth of the path. (number of words separated by periods - 1)
+                int depth = 0;
 
-            // Loop through the config lines
-            for (String line : yamlContents) {
-                // If the line is a node (and not something like a list value)
-                if (line.contains(": ") || (line.length() > 1 && line.charAt(line.length() - 1) == ':')) {
-                    // Grab the index of the end of the node name
-                    int index = 0;
-                    index = line.indexOf(": ");
-                    if (index < 0) {
-                        index = line.length() - 1;
-                    }
-                    // If currentPath is empty, store the node name as the currentPath. (this is only on the first iteration, i think)
-                    if (currentPath.isEmpty()) {
-                        currentPath = line.substring(0, index);
-                    } else {
-                        // Calculate the whitespace preceding the node name
-                        int whiteSpace = 0;
-                        for (int n = 0; n < line.length(); n++) {
-                            if (line.charAt(n) == ' ') {
-                                whiteSpace++;
-                            } else {
-                                break;
-                            }
+                // Loop through the config lines
+                for (String line : yamlContents) {
+                    // If the line is a node (and not something like a list value)
+                    if (line.contains(": ") || (line.length() > 1 && line.charAt(line.length() - 1) == ':')) {
+                        // Grab the index of the end of the node name
+                        int index = 0;
+                        index = line.indexOf(": ");
+                        if (index < 0) {
+                            index = line.length() - 1;
                         }
-                        // Find out if the current depth (whitespace * 4) is greater/lesser/equal to the previous depth
-                        if (whiteSpace / 4 > depth) {
-                            // Path is deeper.  Add a . and the node name
-                            currentPath += "." + line.substring(whiteSpace, index);
-                            depth++;
-                        } else if (whiteSpace / 4 < depth) {
-                            // Path is shallower, calculate current depth from whitespace (whitespace / 4) and subtract that many levels from the currentPath
-                            int newDepth = whiteSpace / 4;
-                            for (int i = 0; i < depth - newDepth; i++) {
-                                currentPath = currentPath.replace(currentPath.substring(currentPath.lastIndexOf(".")), "");
-                            }
-                            // Grab the index of the final period
-                            int lastIndex = currentPath.lastIndexOf(".");
-                            if (lastIndex < 0) {
-                                // if there isn't a final period, set the current path to nothing because we're at root
-                                currentPath = "";
-                            } else {
-                                // If there is a final period, replace everything after it with nothing
-                                currentPath = currentPath.replace(currentPath.substring(currentPath.lastIndexOf(".")), "");
-                                currentPath += ".";
-                            }
-                            // Add the new node name to the path
-                            currentPath += line.substring(whiteSpace, index);
-                            // Reset the depth
-                            depth = newDepth;
+                        // If currentPath is empty, store the node name as the currentPath. (this is only on the first iteration, i think)
+                        if (currentPath.isEmpty()) {
+                            currentPath = line.substring(0, index);
                         } else {
-                            // Path is same depth, replace the last path node name to the current node name
-                            int lastIndex = currentPath.lastIndexOf(".");
-                            if (lastIndex < 0) {
-                                // if there isn't a final period, set the current path to nothing because we're at root
-                                currentPath = "";
-                            } else {
-                                // If there is a final period, replace everything after it with nothing
-                                currentPath = currentPath.replace(currentPath.substring(currentPath.lastIndexOf(".")), "");
-                                currentPath += ".";
+                            // Calculate the whitespace preceding the node name
+                            int whiteSpace = 0;
+                            for (int n = 0; n < line.length(); n++) {
+                                if (line.charAt(n) == ' ') {
+                                    whiteSpace++;
+                                } else {
+                                    break;
+                                }
                             }
-                            //currentPath = currentPath.replace(currentPath.substring(currentPath.lastIndexOf(".")), "");
-                            currentPath += line.substring(whiteSpace, index);
+                            // Find out if the current depth (whitespace * 4) is greater/lesser/equal to the previous depth
+                            if (whiteSpace / 4 > depth) {
+                                // Path is deeper.  Add a . and the node name
+                                currentPath += "." + line.substring(whiteSpace, index);
+                                depth++;
+                            } else if (whiteSpace / 4 < depth) {
+                                // Path is shallower, calculate current depth from whitespace (whitespace / 4) and subtract that many levels from the currentPath
+                                int newDepth = whiteSpace / 4;
+                                for (int i = 0; i < depth - newDepth; i++) {
+                                    currentPath = currentPath.replace(currentPath.substring(currentPath.lastIndexOf(".")), "");
+                                }
+                                // Grab the index of the final period
+                                int lastIndex = currentPath.lastIndexOf(".");
+                                if (lastIndex < 0) {
+                                    // if there isn't a final period, set the current path to nothing because we're at root
+                                    currentPath = "";
+                                } else {
+                                    // If there is a final period, replace everything after it with nothing
+                                    currentPath = currentPath.replace(currentPath.substring(currentPath.lastIndexOf(".")), "");
+                                    currentPath += ".";
+                                }
+                                // Add the new node name to the path
+                                currentPath += line.substring(whiteSpace, index);
+                                // Reset the depth
+                                depth = newDepth;
+                            } else {
+                                // Path is same depth, replace the last path node name to the current node name
+                                int lastIndex = currentPath.lastIndexOf(".");
+                                if (lastIndex < 0) {
+                                    // if there isn't a final period, set the current path to nothing because we're at root
+                                    currentPath = "";
+                                } else {
+                                    // If there is a final period, replace everything after it with nothing
+                                    currentPath = currentPath.replace(currentPath.substring(currentPath.lastIndexOf(".")), "");
+                                    currentPath += ".";
+                                }
+                                //currentPath = currentPath.replace(currentPath.substring(currentPath.lastIndexOf(".")), "");
+                                currentPath += line.substring(whiteSpace, index);
 
+                            }
+                            // This is a new node so we need to mark it for commenting (if there are comments)
+                            commentedPath = false;
                         }
-                        // This is a new node so we need to mark it for commenting (if there are comments)
-                        commentedPath = false;
                     }
-                }
 
-                String comment = "";
-                if (!commentedPath) {
-                    // If there's a comment for the current path, retrieve it and flag that path as already commented
-                    comment = comments.get(currentPath);
-                    commentedPath = true;
-                }
-                if (comment != null) {
-                    // Add the comment to the beginning of the current line
-                    if (!comment.trim().matches("^\\s*$")) {
-                        line = comment + System.getProperty("line.separator") + line;
+                    String comment = "";
+                    if (!commentedPath) {
+                        // If there's a comment for the current path, retrieve it and flag that path as already commented
+                        comment = comments.get(currentPath);
+                        commentedPath = true;
+                    }
+                    if (comment != null) {
+                        // Add the comment to the beginning of the current line
+                        if (!comment.trim().matches("^\\s*$")) {
+                            line = comment + System.getProperty("line.separator") + line;
+                        }
+                    }
+                    if (comment != null || (line.length() > 1 && line.charAt(line.length() - 1) == ':')) {
+                        // Add the (modified) line to the total config String
+                        // This modified version will not write the config if a comment is not present
+                        newContents += line + System.getProperty("line.separator");
                     }
                 }
-                if (comment != null || (line.length() > 1 && line.charAt(line.length() - 1) == ':')) {
-                    // Add the (modified) line to the total config String
-                    // This modified version will not write the config if a comment is not present
-                    newContents += line + System.getProperty("line.separator");
+                try {
+                    // Write the string to the config file
+                    stringToFile(newContents, file);
+                } catch (IOException e) {
+                    return false;
                 }
             }
-            try {
-                // Write the string to the config file
-                stringToFile(newContents, file);
-            } catch (IOException e) {
-                saved = false;
-            }
+            return true;
+        }catch (IOException e) {
+            return false;
         }
-
-        return saved;
     }
 
     /**
