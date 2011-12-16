@@ -39,7 +39,7 @@ public class BlockEvents extends BlockListener {
 
         // Create sign
         BarterSign barterSign = BarterSignsManager.createBarterSign(event.getBlock());
-        barterSign.setOwner(event.getPlayer());
+        barterSign.initialize(event.getPlayer());
     }
 
     public void onBlockPlace(BlockPlaceEvent event) {

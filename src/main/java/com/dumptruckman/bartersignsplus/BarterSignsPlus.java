@@ -1,16 +1,13 @@
 package com.dumptruckman.bartersignsplus;
 
 import com.dumptruckman.bartersignsplus.config.Config;
-import com.dumptruckman.bartersignsplus.persistence.DBManager;
-import com.dumptruckman.bartersignsplus.persistence.Flatfile;
+import com.dumptruckman.bartersignsplus.persistence.DB;
 import com.dumptruckman.bartersignsplus.listener.BlockEvents;
 import com.dumptruckman.bartersignsplus.listener.EntityEvents;
 import com.dumptruckman.bartersignsplus.listener.PlayerEvents;
 import com.dumptruckman.bartersignsplus.locale.Language;
 import com.dumptruckman.bartersignsplus.sign.BarterSign;
 import com.dumptruckman.bartersignsplus.util.Logging;
-import org.blockface.bukkitstats.CallHome;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginManager;
@@ -35,7 +32,7 @@ public class BarterSignsPlus extends JavaPlugin {
 
     final public void onDisable() {
         // Save the plugin data
-        DBManager.save(true);
+        DB.save(true);
 
         // Display disable message/version info
         Logging.info("disabled.", true);
@@ -68,7 +65,7 @@ public class BarterSignsPlus extends JavaPlugin {
 
         // Loads the data
         try {
-            DBManager.load();
+            DB.load();
         } catch (IOException e) {  // Catch errors loading the language file and exit out if found.
             Logging.severe("Encountered an error while loading the data file.  Disabling...");
             pm.disablePlugin(this);

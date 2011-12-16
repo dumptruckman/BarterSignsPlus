@@ -23,6 +23,10 @@ public enum Language {
     INFO ("messages.generic.info"),
 
     NO_CREATE_PERM ("messages.sign.create.denied"),
+    NO_USE_PERM("messages.sign.use.denied"),
+
+    SIGN_SETUP_TEXT("sign.setup"),
+    SIGN_SETUP_MESSAGE("messages.sign.setup"),
     ;
 
     private String path;
@@ -157,6 +161,10 @@ public enum Language {
      */
     public static void sendMessage(CommandSender player, String message, Object...args) {
         List<String> messages = Font.splitString(formatString(message, args));
+        sendMessages(player, messages);
+    }
+
+    public static void sendMessages(CommandSender player, List<String> messages) {
         for (String s : messages) {
             player.sendMessage(s);
         }

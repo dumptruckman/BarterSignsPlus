@@ -24,3 +24,12 @@ messages:
     use:
       denied:
       - 'You do not have permission to use this sign!'
+    setup:
+    - 'Hold the item you wish to sell and left-click the sign.'
+sign:
+  setup:
+  - '&5%1'
+  - 'L-Click with'
+  - 'item you want'
+  - 'to sell'
+  

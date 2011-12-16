@@ -18,6 +18,8 @@ public enum Config {
     DATA_SAVE_PERIOD("settings.data.flatfile.save_every", 300, "# This is often plugin data is written to the disk when using flatfile."),
     DB_TYPE("settings.data.database_type", "flatfile", "# Currently only supports flatfile"),
 
+    PLUGINS_OVERRIDE("plugins.override", true, "# "),
+
     SIGN_SETUP_PHRASES("signs.setup.phrases",
             Arrays.asList("bartershop",
                     "barter shop",
