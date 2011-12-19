@@ -14,6 +14,7 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -22,21 +23,19 @@ import java.util.Map;
 /**
  * @author dumptruckman
  */
-public class BarterSign implements ConfigurationSerializable {
-
-    private final Block block;
-    private final String id;
+public class BarterSign extends MenuSign implements ConfigurationSerializable {
 
     private Boolean indestructible;
     private Boolean dropsContents;
     private OfflinePlayer owner;
     private Boolean active;
-    private Location location;
+
+    private ItemStack itemToSell = null;
 
     public BarterSign(final Block block) {
-        this.block = block;
-        this.location = block.getLocation();
-        this.id = BarterSignsManager.getSignId(block);
+        super(block);
+
+
         this.indestructible = Config.SIGN_INDESTRUCTIBLE.getBoolean();
         this.dropsContents = Config.SIGN_DROPS_ITEMS.getBoolean();
         this.active = false;
@@ -53,9 +52,10 @@ public class BarterSign implements ConfigurationSerializable {
         result.put("owner", this.getOwner());
         result.put("active", this.isActive());
 
-
         result.put("indestructible", this.isIndestructible());
         result.put("dropsContents", this.isDroppingItemsOnBreak());
+
+        result.put("sells", this.getItemSold());
         //@TODO
 
         return result;
@@ -67,13 +67,14 @@ public class BarterSign implements ConfigurationSerializable {
         sign.setOwner((OfflinePlayer) args.get("owner"));
         sign.setActive((Boolean) args.get("active"));
         if (!sign.isActive()) return sign;
-        
+
+        sign.setItemSold((ItemStack) args.get("sells"));
 
         return sign;
     }
 
     public void save() {
-        DB.getData().set(id, this);
+        DB.getData().set(getId(), this);
     }
 
     public void initialize(Player owner) {
@@ -83,6 +84,11 @@ public class BarterSign implements ConfigurationSerializable {
         Language.SIGN_SETUP_MESSAGE.info(owner);
 
         this.save();
+    }
+
+    public void finishSetup(ItemStack itemToSell) {
+        this.setItemSold(itemToSell);
+        this.setActive(true);
     }
 
     public void setSignText(Player player, List<String> message) {
@@ -96,11 +102,12 @@ public class BarterSign implements ConfigurationSerializable {
         sign.update(true);
     }
 
-    public Sign getSign() {
-        BlockState sign = this.getBlock().getState();
-        if (sign instanceof Sign) return (Sign) sign;
-        Logging.severe("Tried to get a sign that is no longer a sign!");
-        return null;
+    public ItemStack getItemSold() {
+        return this.itemToSell;
+    }
+
+    public void setItemSold(ItemStack item) {
+        this.itemToSell = item;
     }
 
     public OfflinePlayer getOwner() {
@@ -113,14 +120,6 @@ public class BarterSign implements ConfigurationSerializable {
 
     public void setActive(Boolean active) {
         this.active = active;
-    }
-
-    public Block getBlock() {
-        return block;
-    }
-
-    public Location getLocation() {
-        return location;
     }
 
     /**
@@ -152,14 +151,6 @@ public class BarterSign implements ConfigurationSerializable {
      */
     public void setOwner(OfflinePlayer player) {
         this.owner = player;
-    }
-
-    /**
-     * Returns the id of this sign
-     * @return id of this sign
-     */
-    public String getId() {
-        return this.id;
     }
 
     /**

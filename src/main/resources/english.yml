@@ -17,6 +17,8 @@ messages:
     - '[Info]'
     help:
     - '[Help]'
+    no_held_item:
+    - 'You must be holding an item!'
   sign:
     create:
       denied:
@@ -32,4 +34,9 @@ sign:
   - 'L-Click with'
   - 'item you want'
   - 'to sell'
+  main_menu:
+  - '&2Barter Shop'
+  - '(right-click)'
+  - '&9%1'
+  - '&9%2'
   

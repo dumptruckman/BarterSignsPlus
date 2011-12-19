@@ -3,7 +3,9 @@ package com.dumptruckman.bartersignsplus;
 import com.dumptruckman.bartersignsplus.locale.Language;
 import com.dumptruckman.bartersignsplus.persistence.DB;
 import com.dumptruckman.bartersignsplus.sign.BarterSign;
+import com.dumptruckman.bartersignsplus.sign.SignRefreshTask;
 import com.dumptruckman.bartersignsplus.util.Logging;
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -15,6 +17,12 @@ import java.util.List;
  * @author dumptruckman
  */
 public class BarterSignsManager {
+
+    private static final int SIGN_MENU_DURATION = 10;
+
+    public static final int BARTER_SIGN = 0;
+    public static final int REFRESH_TASK = 1;
+    public static final int REFRESH_TASK_ID = 2;
 
     private static HashMap<String, BarterSign> signs = new HashMap<String, BarterSign>();
 
@@ -52,11 +60,15 @@ public class BarterSignsManager {
 
     /**
      * Removes a sign from memory and wipes it from the database
-     * @param barterSign sign to remove
+     * @param block Block where sign is to remove
      */
-    public static void destroyBarterSign(BarterSign barterSign) {
-        signs.remove(barterSign.getId());
-        barterSign.destroy();
+    public static void removeBarterSign(Block block) {
+        if (barterSignExists(block)) {
+            BarterSign barterSign = getBarterSign(block);
+            cancelSignRefresh(barterSign.getId());
+            barterSign.destroy();
+            signs.remove(barterSign.getId());
+        }
     }
 
     /**
@@ -80,5 +92,18 @@ public class BarterSignsManager {
         return block.getWorld().getName() + "." + block.getX() + "," + block.getY() + "," + block.getZ();
     }
 
+    public static void cancelSignRefresh(String id) {
+        int taskId = (Integer) signs.get(id).getRefreshTaskId();
+        if (taskId != -1) {
+            Bukkit.getServer().getScheduler().cancelTask(taskId);
+        }
+    }
 
+    public static void scheduleSignRefresh(String id) {
+        cancelSignRefresh(id);
+
+        int taskId = Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(BarterSignsPlus.getInstance(),
+                (SignRefreshTask) signs.get(id).getRefreshTask(), (long) (SIGN_MENU_DURATION * 20));
+        signs.get(id).setRefreshTaskId(taskId);
+    }
 }

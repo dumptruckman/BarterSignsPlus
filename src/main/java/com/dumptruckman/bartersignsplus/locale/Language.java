@@ -7,7 +7,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.util.config.Configuration;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,11 +21,15 @@ public enum Language {
     SUCCESS ("messages.generic.success"),
     INFO ("messages.generic.info"),
 
+    NO_HELD_ITEM("messages.generic.no_held_item"),
+
     NO_CREATE_PERM ("messages.sign.create.denied"),
     NO_USE_PERM("messages.sign.use.denied"),
 
     SIGN_SETUP_TEXT("sign.setup"),
     SIGN_SETUP_MESSAGE("messages.sign.setup"),
+
+    SIGN_MAIN_MENU("sign.main_menu"),
     ;
 
     private String path;
